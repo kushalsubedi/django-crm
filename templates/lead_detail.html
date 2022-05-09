@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+<style>
+    .lead{
+        padding:10px;
+        background-color: #f6f6f6;
+    width:100%;
+    }
+    .lead a {
+        text-decoration: none;
+        font-size: 20px;
+        color: rgba(66, 65, 65, 0.993);
+        margin: auto;
+        font-style:oblique;
+    }
+    .lead li{
+        list-style: none;
+    }
+
+</style>
+
+
+</head>
+<body>
+    <h1>This is our details of {{ lead.first_name }}  </h1>
+    <p>
+        This person age : {{lead.first_name}} {{lead.last_name}} {{lead.age}}
+    </p>
+</body>
+</html>
