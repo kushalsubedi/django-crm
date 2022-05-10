@@ -11,14 +11,14 @@ def home_page(request):
        "leads":leads
     }
 
-    return render (request,"firstpage.html",content)
+    return render (request,"leads/firstpage.html",content)
 
 def lead_detail(request,pk):
     leads= lead.objects.get(id=pk)
     content ={
         "lead":leads
     }
-    return render(request,"lead_detail.html",content)
+    return render(request,"leads/lead_detail.html",content)
 
 #def lead_create(request):
 #    form=LeadForm()
@@ -58,18 +58,26 @@ def lead_create(request):
         "form":form
     }
 
-    return render(request,"create.html",context)
+    return render(request,"leads/create.html",context)
 
 def lead_update(request,pk):
-    lead=lead.objects.get(id=pk)
+    leads=lead.objects.get(id=pk)
+    
     form=LeadModelForm(instance=lead)
     if request.method == 'POST':
-        form = LeadModelForm(request.POST, instance=lead)
+        form = LeadModelForm(request.POST, instance=leads.cleaned_data())
         if form.is_valid():
             form.save()
             return redirect("/leads")
     context = {
         'form':form,
-        'lead':lead
+        'lead':leads
     }
-    return render(request,'update.html',context)
+    return render(request,'leads/update.html',context)
+
+
+
+def lead_delete (request,pk):
+    leads=lead.objects.get(id=pk)
+    leads.delete()
+    return redirect("/leads")
