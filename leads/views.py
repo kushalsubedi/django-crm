@@ -1,17 +1,64 @@
 
-from django.shortcuts import render,redirect
+from re import template
+from django.shortcuts import render,redirect,reverse
 from django.http import HttpResponse
 from .models import lead,Agent
-from .forms import LeadModelForm,LeadForm
+from .forms import LeadModelForm
 # Create your views here.
-  
-def home_page(request):
+#
+from django.views.generic import TemplateView,ListView,UpdateView,CreateView,DetailView,DeleteView
+#
+#class based views 
+class LandingPageView(TemplateView):
+    template_name="landingpage.html"
+
+
+class LeadListView(ListView):
+    template_name="leads/leadlist.html"
+    queryset = lead.objects.all()
+    #context_objext_name='leads'
+
+
+class LeadDetailView(DetailView):
+    template_name="leads/lead_detail.html"
+    queryset = lead.objects.all()
+    context_objext_name='lead'
+
+class LeadCreateView(CreateView):
+    template_name="leads/create.html"
+    form_class=LeadModelForm
+
+    def get_success_url(self) -> str:
+        return reverse("lead:lead-list")
+
+class LeadUpdateView(UpdateView):
+    model=lead
+    template_name="leads/update.html"
+    form_class=LeadModelForm
+
+    def get_success_url(self) -> str:
+         return reverse("lead:lead-list")
+
+class LeadDeleteView(DeleteView):
+    template_name="leads/lead_delete.html"
+    model=lead
+
+    def get_success_url(self) -> str:
+        return reverse("lead:lead-list")
+        
+    
+ 
+#method based views
+def landing_page(request):
+    return render(request,"landingpage.html") 
+
+def lead_list(request):
     leads = lead.objects.all()
     content ={
        "leads":leads
     }
 
-    return render (request,"leads/firstpage.html",content)
+    return render (request,"leads/leadlist.html",content)
 
 def lead_detail(request,pk):
     leads= lead.objects.get(id=pk)
@@ -39,7 +86,6 @@ def lead_detail(request,pk):
 #            return redirect('/leads')
 #
 #
-
 #    context ={
 #        "form":LeadForm
 #    }

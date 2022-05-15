@@ -5,28 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
-<style>
-    .lead{
-        padding:10px;
-        background-color: #f6f6f6;
-    width:100%;
-    }
-    .lead a {
-        text-decoration: none;
-        font-size: 20px;
-        color: rgba(66, 65, 65, 0.993);
-        margin: auto;
-        font-style:oblique;
-    }
-    .lead li{
-        list-style: none;
-    }
-
-</style>
-
-
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-{%block content%}
-{%endblock%}
+<body>
+
+<div class="max-w-7xl mx-auto ">
+    {%include "navbar.html"%}
+
+
+
+    {%block content%}
+    {%endblock%}
+
+
+</div>
+
+
+</body>
+
+
+
 </html>
