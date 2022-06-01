@@ -1,37 +1,60 @@
+from curses.ascii import US
+from django.core.mail import send_mail
 
-from re import template
+from django.views import generic
 from django.shortcuts import render,redirect,reverse
 from django.http import HttpResponse
 from .models import lead,Agent
-from .forms import LeadModelForm
+from .forms import LeadModelForm,CustomUserCreationForm
 # Create your views here.
 #
 from django.views.generic import TemplateView,ListView,UpdateView,CreateView,DetailView,DeleteView
 #
 #class based views 
-class LandingPageView(TemplateView):
+
+class SignupView(generic.CreateView):
+    template_name='registration/signup.html'
+    from_class =CustomUserCreationForm
+  
+
+    def get_succedd_url(self)->str:
+        return reverse("login")
+
+
+
+class LandingPageView(generic.TemplateView):
     template_name="landingpage.html"
 
 
-class LeadListView(ListView):
+class LeadListView(generic.ListView):
     template_name="leads/leadlist.html"
-    queryset = lead.objects.all()
+    queryset = lead.objects.all()     
     #context_objext_name='leads'
 
 
-class LeadDetailView(DetailView):
+class LeadDetailView(generic.DetailView):
     template_name="leads/lead_detail.html"
     queryset = lead.objects.all()
     context_objext_name='lead'
 
-class LeadCreateView(CreateView):
+class LeadCreateView(generic.CreateView):
     template_name="leads/create.html"
     form_class=LeadModelForm
 
     def get_success_url(self) -> str:
         return reverse("lead:lead-list")
 
-class LeadUpdateView(UpdateView):
+    def form_valid(self,form):
+        send_mail (
+            subject="A lead has been created",
+            message =" Go to the sitr to see the new lead",
+            from_email = "test@test.com",
+            recipient_list = ['test2@test.com']
+        )
+        return super(LeadCreateView,self).form_valid(form)
+
+
+class LeadUpdateView(generic.UpdateView):
     model=lead
     template_name="leads/update.html"
     form_class=LeadModelForm
@@ -39,7 +62,7 @@ class LeadUpdateView(UpdateView):
     def get_success_url(self) -> str:
          return reverse("lead:lead-list")
 
-class LeadDeleteView(DeleteView):
+class LeadDeleteView(generic.DeleteView):
     template_name="leads/lead_delete.html"
     model=lead
 
@@ -67,7 +90,7 @@ def lead_detail(request,pk):
     }
     return render(request,"leads/lead_detail.html",content)
 
-#def lead_create(request):
+""" #def lead_create(request):
 #    form=LeadForm()
 #    if request.method == 'POST':
 #        form=LeadForm(request.POST)
@@ -126,4 +149,5 @@ def lead_update(request,pk):
 def lead_delete (request,pk):
     leads=lead.objects.get(id=pk)
     leads.delete()
-    return redirect("/leads")
+    return redirect("/leads") 
+    """
